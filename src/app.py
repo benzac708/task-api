@@ -21,7 +21,7 @@ class TaskIn(BaseModel):
 @app.get("/healthz")
 def healthz():
     REQUESTS.labels("GET", "/healthz", 200).inc()
-    return {"status": "ok", "version": "0.1.1"}
+    return {"status": "ok", "version": "0.1.2"}
 
 
 @app.get("/metrics")
