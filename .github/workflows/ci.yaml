@@ -32,9 +32,9 @@ jobs:
         run: |
           git clone https://x-access-token:${CONFIG_REPO_TOKEN}@github.com/benzac708/task-api-config.git /tmp/config
           cd /tmp/config/base
-          kustomize edit set image ghcr.io/benzac708/task-api=ghcr.io/benzac708/task-api:${{ github.sha }}
+          sed -i 's|image: ghcr.io/benzac708/task-api:.*|image: ghcr.io/benzac708/task-api:${{ github.sha }}|' deployment.yaml
           git config user.email "ci@github.com"
           git config user.name "GitHub Actions"
-          git add kustomization.yaml
+          git add deployment.yaml
           git commit -m "chore: bump task-api to ${{ github.sha }}"
           git push origin main
