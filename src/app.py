@@ -5,7 +5,7 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 from starlette.responses import Response
 from pydantic import BaseModel
 
-app = FastAPI(title="Task API", version="0.1.5")
+app = FastAPI(title="Task API", version="0.1.6")
 
 REQUESTS = Counter("http_requests_total", "Total HTTP requests", ["method", "path", "status"])
 LATENCY = Histogram("http_request_duration_seconds", "Request latency", ["path"])
