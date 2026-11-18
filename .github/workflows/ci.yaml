@@ -25,3 +25,16 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+      - name: Bump image tag in config repo
+        env:
+          CONFIG_REPO_TOKEN: ${{ secrets.CONFIG_REPO_TOKEN }}
+        run: |
+          git clone https://x-access-token:${CONFIG_REPO_TOKEN}@github.com/benzac708/task-api-config.git /tmp/config
+          cd /tmp/config
+          kustomize edit set image ghcr.io/benzac708/task-api=ghcr.io/benzac708/task-api:${{ github.sha }}
+          git config user.email "ci@github.com"
+          git config user.name "GitHub Actions"
+          git add base/deployment.yaml
+          git commit -m "chore: bump task-api to ${{ github.sha }}"
+          git push origin main
