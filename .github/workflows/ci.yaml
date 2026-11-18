@@ -33,9 +33,13 @@ jobs:
 
       - name: Bump image tag in config repo
         env:
-          CONFIG_REPO_TOKEN: ${{ secrets.CONFIG_REPO_TOKEN }}
+          SSH_KEY: ${{ secrets.CONFIG_REPO_TOKEN }}
         run: |
-          git clone https://x-access-token:${CONFIG_REPO_TOKEN}@github.com/benzac708/task-api-config.git /tmp/config
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          git clone git@github.com:benzac708/task-api-config.git /tmp/config
           cd /tmp/config/base
           sed -i 's|image: ghcr.io/benzac708/task-api:.*|image: ghcr.io/benzac708/task-api:${{ github.sha }}|' deployment.yaml
           git config user.email "ci@github.com"
